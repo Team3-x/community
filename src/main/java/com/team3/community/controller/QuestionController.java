@@ -1,8 +1,8 @@
 package com.team3.community.controller;
 
-import com.team3.community.dto.CommentCreateDTO;
 import com.team3.community.dto.CommentDTO;
 import com.team3.community.dto.QuestionDTO;
+import com.team3.community.enums.CommentTypeEnum;
 import com.team3.community.service.CommentService;
 import com.team3.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,13 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model){
         QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> comments = commentService.listByQuestion(id);
+        List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTIN);
         //累加阅读数
         questionService.incView(id);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
 
     }
