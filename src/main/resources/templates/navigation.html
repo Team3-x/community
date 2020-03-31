@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <body>
 <div th:fragment="nav">
     <nav class="navbar navbar-default">
@@ -14,9 +14,9 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left">
+                <form class="navbar-form navbar-left" action="/" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="搜索话题">
+                        <input type="text" class="form-control" name="search" placeholder="搜索话题">
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
@@ -36,7 +36,9 @@
                         </ul>
                     </li>
                     <li th:if="${session.user == null}">
-                        <a href="https://github.com/login/oauth/authorize?client_id=7cf67dc1ef6f4d06a8a1&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
+                        <a href="/login">登录</a>
+                        <!--<a href="https://github.com/login/oauth/authorize?client_id=7cf67dc1ef6f4d06a8a1&redirect_uri=http://localhost:8887/callback&scope=user&state=1">g登录</a>-->
+
                     </li>
                 </ul>
             </div>

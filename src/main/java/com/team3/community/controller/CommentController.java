@@ -43,6 +43,7 @@ public class CommentController {
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
         commentService.insert(comment, user);
+        System.out.println(comment.getParentId());
         return ResultDTO.okOf();
     }
 

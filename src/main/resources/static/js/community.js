@@ -124,6 +124,7 @@ function showSelectTag() {
 function selectTag(e) {
     var value = e.getAttribute("data-tag");
     var previous = $("#tag").val();
+
     if (previous.indexOf(value) == -1) {
         if (previous) {
             $("#tag").val(previous + ',' + value);
@@ -131,4 +132,39 @@ function selectTag(e) {
             $("#tag").val(value);
         }
     }
+}
+
+function follow(e) {
+    var qid = e.getAttribute("qid");
+    var type = e.getAttribute("type");
+    if (type == 0) {
+        e.classList.remove("btn-success");
+        e.classList.add("btn-default");
+        $("#follow").text("已关注");
+        alert("关注成功");
+        // e.setAttribute("type",1);
+    } else {
+        e.classList.remove("btn-default");
+        e.classList.add("btn-success");
+        $("#follow").text("关注");
+        alert("已经取消关注");
+        // e.setAttribute("type",0);
+    }
+    followType(qid,type);
+}
+function followType(targetId, type) {
+
+    $.ajax({
+        type: "POST",
+        url: "/follow",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "qid": targetId,
+            "type": type
+        }),
+        // success: function () {
+        //     window.location.reload();
+        // },
+        dataType: "json"
+    });
 }

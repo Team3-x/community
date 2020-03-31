@@ -18,12 +18,12 @@ public class UserService {
         userExample.createCriteria()
                 .andAccountIdEqualTo(user.getAccountId());
         List<User> users = userMapper.selectByExample(userExample);
-        if(users.size() == 0){
+        if (users.size() == 0) {
             //插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-        }else {
+        } else {
             //更新
             User dbUser = users.get(0);
             User updateUser = new User();
@@ -37,4 +37,30 @@ public class UserService {
             userMapper.updateByExampleSelective(updateUser, example);
         }
     }
+
+    public User selectUser(String email, String password) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andEmailEqualTo(email)
+                .andPasswordEqualTo(password);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0) {
+            return null;
+        } else {
+            return users.get(0);
+        }
+    }
+
+    public User selectUserByEmail(String email) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andEmailEqualTo(email);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0) {
+            return null;
+        } else {
+            return users.get(0);
+        }
+    }
+
 }

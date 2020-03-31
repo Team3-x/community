@@ -1,7 +1,6 @@
 package com.team3.community.controller;
 
 import com.team3.community.dto.PaginationDTO;
-import com.team3.community.model.Notification;
 import com.team3.community.model.User;
 import com.team3.community.service.NotificationService;
 import com.team3.community.service.QuestionService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class ProfileController {
@@ -40,6 +38,11 @@ public class ProfileController {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
             PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
+        } else if("follows".equals(action)) {
+            model.addAttribute("section", "follows");
+            model.addAttribute("sectionName", "我的关注");
+            PaginationDTO paginationDTO = questionService.followList(user.getId(), page, size);
             model.addAttribute("pagination", paginationDTO);
         } else if ("replies".equals(action)) {
             PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
