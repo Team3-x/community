@@ -39,4 +39,11 @@ public class ResultDTO<T> {
         resultDTO.setData(t);
         return resultDTO;
     }
+
+    public static ResultDTO okOf(Integer code, String message){
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setCode(code);
+        resultDTO.setMessage(message);
+        return resultDTO;
+    }
 }

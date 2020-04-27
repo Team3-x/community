@@ -36,17 +36,17 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public PaginationDTO list(String search, Integer page, Integer size) {
+        //判断查询输入不为空
         if (StringUtils.isNotBlank(search)) {
             String[] tags = StringUtils.split(search, " ");
             search = Arrays.stream(tags).collect(Collectors.joining("|"));
         }
-
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         questionQueryDTO.setSearch(search);
+        //获取查询的数量
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
-
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -59,14 +59,14 @@ public class QuestionService {
         if (page > totalPage) {
             page = totalPage;
         }
-
         paginationDTO.setPagination(totalPage, page);
         Integer offset = page < 1 ? 0 : size * (page - 1);
         questionQueryDTO.setSize(size);
         questionQueryDTO.setPage(offset);
+        //获取查询得到的问题
         List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-
+        //遍历查询得到的问题
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
@@ -74,8 +74,8 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-
         paginationDTO.setData(questionDTOList);
+        //返回查询结果
         return paginationDTO;
     }
 
@@ -229,7 +229,6 @@ public class QuestionService {
                     .andIdEqualTo(qid);
             List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
             Question question = questions.get(0);
-            System.out.println(question.getId());
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -241,4 +240,41 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    public PaginationDTO questionList(Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalPage;
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria();
+        //获取所有问题的数量
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
+        if (totalCount % size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        paginationDTO.setPagination(totalPage, page);
+        Integer offset = size * (page - 1);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria();
+        //获取所有问题
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        for (Question question : questions) {
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+        //返回查询得到的信息
+        paginationDTO.setData(questionDTOList);
+        return paginationDTO;
+    }
 }

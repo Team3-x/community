@@ -16,7 +16,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left" action="/" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search" placeholder="搜索话题">
+                        <input type="text" class="form-control" name="search" placeholder="搜索问题">
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
@@ -31,7 +31,11 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li th:if="${session.user.id == 7}">
+                                <a href="/admin/questions">管理中心</a>
+                            </li>
                             <li><a href="/profile/questions">我的问题</a></li>
+                            <li><a th:href="@{'/user/'+ ${session.user.id}}">用户中心</a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>

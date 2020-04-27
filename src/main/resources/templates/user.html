@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>开发论坛</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-fileinput.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap-fileinput.js"></script>
+</head>
+
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="form-group main">
+    <div class="row">
+        <h2 class="user">用户中心</h2>
+        <hr>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div id="ImportHead">
+                <!--<table border="0" class="frm" style="height: 35px; width: auto; padding-left: 5px; padding-top: 1px;">-->
+                    <form id="myform" action="/user" method="post" enctype="multipart/form-data" class="form-user">
+                        <input type="hidden" name="id" th:value="${id}">
+                        <!--<input type="file" id="file" name="file" />-->
+                        <!--<div id="image-wrap1" style="width: 300px; height: 300px; border: solid 1px lightGray"></div>-->
+                        <div class="fileinput fileinput-new" data-provides="fileinput" id="uploadImageDiv">
+                            我的头像：<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                <img th:src="${avatar}" alt="" id="avatar"/>
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail"  style="max-width: 200px; max-height: 150px;"></div>
+                            <!--<input type="hidden" name="avatar" th:value="${id}">-->
+                        <div>
+                        <!--<span class="btn btn-default btn-file"> -->
+                            <!--<span class="fileinput-new">选择图片</span> <span class="fileinput-exists">更改</span> <input type="file" name="uploadImage" id="uploadImage" /></span>-->
+                                <!--<a href="#" class="btn default fileinput-exists" data-dismiss="fileinput">移除</a>-->
+                                <input type="file" id="file" name="file" />
+                                <!--<input type="submit" value="确认修改"/>-->
+                                <!--<div id="image-wrap1" style="width: 300px; height: 300px; border: solid 1px lightGray">-->
+                                <!--</div>-->
+
+                                <!--<span>请选择1M以内图片</span>-->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            用户名：<input type="name" class="form-control" id="name" name="name" th:value="${name}">
+                        </div>
+                        <div id="name-result"></div>
+                        <div class="form-group">
+                            邮箱：<input type="email" class="form-control" id="email" name="email" th:value="${email}" >
+                        </div>
+                        <div id="email-result"></div>
+                        <div class="form-group">
+                            旧密码：<input type="password" class="form-control" id="password" name="password" placeholder="密码" >
+                        </div>
+                        <div class="form-group">
+                            新密码：<input type="password" class="form-control" id="password1" name="password1" placeholder="新密码" disabled>
+                        </div>
+                        <div class="form-group">
+                            重复密码：<input type="password" class="form-control" id="password2" name="password2" placeholder="重复密码" disabled>
+                        </div>
+                        <div id="password-result"></div>
+                        <input type="submit" value="确认修改" onclick="alert('修改成功')"/>
+                    </form>
+
+                <!--</table>-->
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+
+
+<script>
+//     var url = '';
+//     $("#uploadImage").fileupload({
+//         url : ROOT + "/security/company/uploadFile",
+//         dataType : 'json',
+//         autoUpload : false,
+//         acceptFileTypes : /(gif|jpe?g|png)$/i,
+//         maxFileSize : 1000000, // 1 MB
+//         imageMaxWidth : 100,
+//         imageMaxHeight : 100,
+//         messages : {
+//             acceptFileTypes : '文件类型不匹配',
+//             maxFileSize : '文件过大',
+//             minFileSize : '文件过小'
+//         }
+//     }).on("fileuploadadd", function(e, data) {
+//         // 当文件添加上去时候调用
+//         $("#titleImageError").html("");
+//         data.submit()
+//     }).on("fileuploaddone", function(e, data) {
+//         // 上传完成时调用
+//         if (data.result.returnState == "ERROR") {
+//             alert("上传失败")
+//             return;
+//         }
+//         url = data.result.returnData.url;
+//     });
+//
+//     function updateMsg() {
+//         $.ajax({
+//             url : ROOT + "/security/company/updateInfo",
+//             data : {
+//                 id : $("#companyId").val(),
+//                 image : url,
+//                 companyName : $("#companyName").val(),
+//                 companySite : $("#companySite").val(),
+//                 companyLinker : $("#companyLinker").val(),
+//                 companyTel : $("#companyTel").val()
+//             },
+//             type : "post",
+//             success : function(data) {
+//                 if (data.returnState == "OK") {
+//                     layer.msg('操作成功', {
+//                         icon : 6,
+//                         shade : 0.01,
+//                         offset : [ '57px', '1100px' ]
+//                     });
+//                     $table.bootstrapTable('refresh');
+//                 } else {
+//                     layer.msg('操作失败', {
+//                         icon : 5,
+//                         shade : 0.01,
+//                         offset : [ '90px', '900px' ]
+//                     });
+//                 }
+//             }
+//         });
+//     }
+//
+//     function clear(){
+//         $("#file").remove();
+//         $('#myform').prepend("<input type=\"file\" id=\"file\" name=\"file\"/>");
+//         $.imageFileVisible({ wrapSelector: "#image-wrap1",
+//             fileSelector: "#file",
+//             width: 300,
+//             height: 300
+//         });
+//     }
+//     //图片显示插件
+//     (function ($) {
+//         $.imageFileVisible = function (options) {
+//             // 默认选项
+//             var defaults = {
+//                 //包裹图片的元素
+//                 wrapSelector: null,
+//                 //<input type=file />元素
+//                 fileSelector: null,
+//                 width: '100%',
+//                 height: 'auto',
+//                 errorMessage: "不是图片"
+//             };
+//             // Extend our default options with those provided.
+//             var opts = $.extend(defaults, options);
+//             $(opts.fileSelector).on("change", function () {
+//                 $("#image-wrap1").empty();
+//                 var file = this.files[0];
+//                 var imageType = /image.*/;
+//                 if(file.size>1024*500){
+//                     alert("请上传小于512k的图片");
+//                     clear();
+//                     return;
+//                 }
+//                 if (file.type.match(imageType)) {
+//                     var reader = new FileReader();
+//                     reader.onload = function () {
+//                         var img = new Image();
+//                         img.src = reader.result;
+//                         $(img).width(opts.width);
+//                         $(img).height(opts.height);
+//                         $(opts.wrapSelector).append(img);
+//                     };
+//                     reader.readAsDataURL(file);
+//                 } else {
+//                     clear();
+//                     alert(opts.errorMessage);
+//                 }
+//             });
+//         };
+//     })(jQuery);
+//     $(document).ready(
+//         function(e){
+// //图片显示插件
+//             if (typeof FileReader == 'undefined')
+//                 $("#destination").css({'background': 'none'}).
+//                 html('亲,您的浏览器还不支持HTML5的FileReader接口,无法使用图片本地预览,请更新浏览器获得最好体验');
+//             $.imageFileVisible({ wrapSelector: "#image-wrap1",
+//                 fileSelector: "#file",
+//                 width: 300,
+//                 height: 300
+//             });
+//
+//             //获取展示的usr信息
+//             $.ajax({
+//                 //访问地址
+//                 url: "/login",
+//                 //访问方式，一般有GET或POST两种
+//                 type: 'GET',
+//                 //返回的数据格式，这个是可选参数，jquery回默认判断返回参数的类型
+//                 dataType: 'json'
+//             })
+//             //成功后的处理函数,res为服务器返回的数据
+//                 .done(function(usr) {
+//                     //如果返回结果不为空
+//                     if(usr!=null){
+//                         $("#icon").attr('src',usr.icon);
+//                     }
+//                 })
+//         })
+
+
+    $(function() {
+        $('#password').bind('input propertychange', function () {
+            var password = $("#password").val();
+            $.ajax({
+                url: "/user/check",
+                type: 'post',
+                data: JSON.stringify({"password": password}),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response.code == 2011) {
+                        $('#password1').removeAttr("disabled");
+                        $('#password2').removeAttr("disabled");
+                    }
+                }
+                // error: function () {
+                //     alert(response);
+                //     $('#name-result').html("校验用户名出现错误");
+                // }
+
+            });
+        });
+        $('#password2').bind('input propertychange', function () {
+            var password1 = $("#password1").val();
+            var password2 = $("#password2").val();
+            if (password1 !== password2) {
+                $('#password-result').html("重复密码错误");
+                $('#password-result').css("color", "red");
+            } else {
+                $('#password-result').html("重复密码正确");
+                $('#password-result').css("color", "green");
+            }
+        });
+    });
+
+
+</script>
+
+<div th:insert="~{footer :: foot}"></div>
+</body>
+</html>

@@ -13,35 +13,30 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class LoginController {
+public class AdminLoginController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/admin-login")
     public String loginPage(){
-        return "login";
+        return "admin-login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/admin-login")
     public String login(
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "account",required = false) String account,
+            @RequestParam(value = "password",required = false) String password,
             HttpServletResponse response,
-            Model model) {
-        //查询数据库中是否存在该用户信息
-        User user = userService.selectUser(email, password);
+            Model model){
+        User user = userService.selectAdmin(account, password);
         if (user != null) {
             String token = user.getToken();
-            //添加cookie实现持久化登录
-            response.addCookie(new Cookie("token", token));
-            //返回首页
-            return "redirect:/";
+            response.addCookie(new Cookie("token",token));
+            return "redirect:/admin/questions";
         } else {
-            //返回错误信息
             model.addAttribute("error", "邮箱或密码错误");
-            //返回登录页面
-            return "login";
+            return "admin-login";
         }
     }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>登录</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,24 +11,106 @@
 </head>
 
 <body>
-<div class="wrapper">
-    <form class="form-signin" action="/register" method="post">
-        <h2 class="form-signin-heading text-center">注册</h2>
-        <div class="form-group">
-            <input type="name" class="form-control" id="name" name="name" placeholder="用户名">
-        </div>
-        <div class="form-group">
-            <input type="email" class="form-control" id="email" name="email" placeholder="邮箱">
-        </div>
-        <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" placeholder="密码">
-        </div>
-        <a href="login" type="login" class="login btn btn-info">登录</a>
-        <button type="register" class="register btn btn-info">注册</button>
-        <div class="alert alert-danger" th:text="${error}" th:if="${error != null}"></div>
+    <div class="wrapper">
+        <form class="form-signin" action="/register" method="post">
+            <h2 class="form-signin-heading text-center">注册</h2>
+            <div class="form-group">
+                <input type="name" class="form-control" id="name" name="name" placeholder="用户名">
+            </div>
+            <div id="name-result"></div>
+            <div class="form-group">
+                <input type="email" class="form-control" id="email" name="email" placeholder="邮箱" >
+            </div>
+            <div id="email-result"></div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="密码" >
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" id="repassword" name="repassword" placeholder="重复密码" >
+            </div>
+            <div id="password-check"></div>
+            <a href="login" type="login" class="login btn btn-info">登录</a>
+            <button type="register" class="register btn btn-info">注册</button>
+        </form>
+    </div>
 
 
-    </form>
-</div>
+
+    <script>
+        $(function(){
+
+            $('#name').bind('input propertychange', function() {
+                // $('#result').html($(this).val().length);
+                var name = $("#name").val();
+                if (name == null) {
+                    $('#name-result').html("用户名不能为空");
+                }
+                $.ajax({
+                    url: "/register/checkName",
+                    type: 'post',
+                    data:JSON.stringify({"name":name}),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success:function(response) {
+                        if (response.code == 2010 && name != null) {
+                            $('#name-result').html(response.message);
+                            $('#name-result').css("color", "red");
+                        } else {
+                            $('#name-result').html("用户名可以使用");
+                            $('#name-result').css("color", "green");
+                        }
+                    },
+                    error: function(){
+                        alert(response);
+                        $('#name-result').html("校验用户名出现错误");
+                    }
+
+                });
+            });
+
+            $('#email').bind('input propertychange', function() {
+                // $('#result').html($(this).val().length);
+                var email = $("#email").val();
+                var myreg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+                $.ajax({
+                    url: "/register/checkEmail",
+                    type: 'post',
+                    data:JSON.stringify({"email":email}),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success:function(response) {
+                        if (response.code == 2011 && email != null) {
+                            $('#email-result').html(response.message);
+                            $('#email-result').css("color", "red");
+                        } else if(!myreg.test(email)){
+                            $('#email-result').html("请输入有效的邮箱");
+                            $('#email-result').css("color", "red");
+                        } else {
+                            $('#email-result').html("邮箱可以使用");
+                            $('#email-result').css("color", "green");
+                        }
+                    },
+                    error: function(){
+                        alert(response);
+                        $('#email-result').html("校验邮箱出现错误");
+                    }
+
+                });
+            });
+
+            $('#repassword').bind('input propertychange', function() {
+                var password = $('#password');
+                var repassword = $('#repassword');
+                if (password.equals(repassword)) {
+                    $('#password-check').html("重复密码正确");
+                    $('#email-result').css("color", "green");
+                } else {
+                    $('#password-check').html("请重复密码");
+                }
+            });
+
+        });
+
+    </script>
 </body>
 </html>

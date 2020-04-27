@@ -56,7 +56,12 @@ public class FollowController {
                 String s = String.valueOf(followDTO.getQId());
                 arrayList.removeIf(str -> str.equals(s));
                 String questionId2 = arrayList.toString();
-                user.setFollowId(questionId2);
+                int end = questionId2.length() - 1;
+                String substring = questionId2.substring(1, end);
+                if ("".equals(substring)){
+                    substring = null;
+                }
+                user.setFollowId(substring);
             }
             model.addAttribute("type", 0);
         }

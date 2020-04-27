@@ -1,8 +1,10 @@
 package com.team3.community.controller;
 
 import com.team3.community.dto.CommentDTO;
+import com.team3.community.dto.IdDTO;
 import com.team3.community.dto.QuestionDTO;
 import com.team3.community.enums.CommentTypeEnum;
+import com.team3.community.mapper.QuestionMapper;
 import com.team3.community.mapper.UserMapper;
 import com.team3.community.model.User;
 import com.team3.community.service.CommentService;
@@ -23,6 +25,9 @@ public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private QuestionMapper questionMapper;
 
     @Autowired
     private CommentService commentService;
@@ -92,5 +97,11 @@ public class QuestionController {
 ////        model.addAttribute("followed", true);
 //        return "redirect:/";
 //    }
+
+    @DeleteMapping("/question/delete")
+    public String delete(@RequestBody IdDTO questionIdDTO){
+        questionMapper.deleteByPrimaryKey(questionIdDTO.getId());
+        return "redirect:/admin/questions";
+    }
 
 }

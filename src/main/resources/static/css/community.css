@@ -165,6 +165,21 @@ body {
     width: 45%;
     margin-bottom: 10px;
 }
-.form-signin .github-register{
-    margin-top: 80px;
+.form-signin .github-login{
+    margin-top: 60px;
+}
+
+.admin-list{
+    float: none;
+}
+
+.user {
+    margin-left: 35px;
+}
+
+.form-user {
+    margin: 20px 30%;
+}
+admin-login {
+    margin-top: 20px;
 }
