@@ -65,7 +65,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.18</version>
+            <version>8.0.28</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>com.h2database</groupId>-->
@@ -113,7 +113,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.6</version>
+                        <version>8.0.28</version>
                     </dependency>
                     <!--<dependency>-->
                         <!--<groupId>com.h2database</groupId>-->
@@ -130,7 +130,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.6</version>
+                        <version>8.0.28</version>
                         <!--<groupId>com.h2database</groupId>-->
                         <!--<artifactId>h2</artifactId>-->
                         <!--<version>1.4.199</version>-->
